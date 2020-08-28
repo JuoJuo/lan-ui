@@ -8,4 +8,9 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/preset-create-react-app"
   ],
+  webpackFinal: async (config) => {
+    config.resolve.alias['@'] = require('path').resolve(__dirname, '../src');
+    config.resolve.extensions.push(".ts", ".tsx");
+    return config;
+  },
 };

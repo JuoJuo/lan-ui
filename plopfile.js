@@ -26,7 +26,7 @@ module.exports = function(plop) {
       },
       {
         type: "add",
-        path: "src/components/{{name}}/{{name}}.stories.tsx",
+        path: "src/stories/{{name}}/{{name}}.stories.tsx",
         templateFile: "plop-template/componentStories.hbs",
       },
     ],
