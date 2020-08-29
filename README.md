@@ -1,4 +1,6 @@
 # my react components
 
-TODO btnGroup
-TODO global set size
+### TODOS
+- btnGroup
+- global set size
+- icon support

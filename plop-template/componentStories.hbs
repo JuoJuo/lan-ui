@@ -1,19 +1,16 @@
 import React from 'react';
-// also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/react/types-6-0';
-
-// @ts-ignore
-import { {{headCaps name}}, {{headCaps name}}Props } from '@/components/{{name}}';
+import { {{headCaps name}}, {{headCaps name}}Props } from '../../components/{{name}}';
 
 export default {
-  title: 'Example/{{headCaps name}}',
+  title: 'Elements/{{headCaps name}}',
   component: {{headCaps name}},
 } as Meta;
 
 const Template: Story<{{headCaps name}}Props> = (args) => <{{headCaps name}} {...args} />;
 
 export const Primary = Template.bind({});
-  Primary.args = {
-  primary: true,
-  label: 'Button',
+Primary.args = {
+  color: 'primary',
+  size: 'normal',
 };

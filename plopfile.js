@@ -21,11 +21,6 @@ module.exports = function(plop) {
       },
       {
         type: "add",
-        path: "src/components/{{name}}/index.sass",
-        templateFile: "plop-template/componentIndexSass.hbs",
-      },
-      {
-        type: "add",
         path: "src/components/{{name}}/__test__/{{name}}.test.tsx",
         templateFile: "plop-template/componentTest.hbs",
       },

@@ -1,7 +1,19 @@
 import React from 'react';
+import 'bulma';
+import { MainColorTypes, sizeTypes } from "../button";
+import { getClassNames, getDefaultGlobalSize } from "../../utils";
 
-export interface {{headCaps name}}Props {}
+export interface {{headCaps name}}Props {
+  /**
+  * input边框的颜色
+  */
+  color?: MainColorTypes;
+  /**
+  * 按钮大小
+  */
+  size?: sizeTypes;
+}
 
-export const Button: React.FC<{{headCaps name}}Props> = (props) => {
+export const {{headCaps name}}: React.FC<{{headCaps name}}Props> = (props) => {
   return <button>xxxx</button>;
 }
