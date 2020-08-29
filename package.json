@@ -50,6 +50,7 @@
     "babel-loader": "^8.1.0",
     "plop": "^2.7.4",
     "react-app-rewired": "^2.1.6",
-    "react-is": "^16.13.1"
+    "react-is": "^16.13.1",
+    "sass": "^1.26.10"
   }
 }
