@@ -44,7 +44,7 @@ export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   /**
    * 点击事件
    */
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
 export const Button: React.FC<ButtonProps> = (props) => {
