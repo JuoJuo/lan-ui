@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import 'bulma';
 import { getDefaultGlobalSize, getDefaultGlobalColor, getClassNames } from '../../utils';
 
@@ -8,7 +8,7 @@ export type colorTypes  = 'white' | 'light' | 'dark' | 'black' | 'text' | 'link'
 /*
 * docs uses
 * */
-export interface ButtonProps {
+export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   /**
    * 按钮背景颜色
    */
