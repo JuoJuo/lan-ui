@@ -24,6 +24,19 @@ function addPrefix(str: string, prefix = 'is',): string {
   return `${prefix}-${str}`;
 }
 
+export function cloneDeep(obj: any){
+  if(obj === null) return null;
+  if(typeof obj !== 'object') return obj;
+  if(obj instanceof RegExp) return new RegExp(obj);
+  if(obj instanceof Date) return new Date(obj);
+
+  let newObj = new obj.constructor();
+  for(let key in obj) {
+    newObj[key] = cloneDeep(obj[key])
+  }
+  return newObj;
+}
+
 export const getClassNames = ({ light, outlined, inverted, rounded, loading, color, size}: Partial<ButtonProps>) => {
   const str = [];
 

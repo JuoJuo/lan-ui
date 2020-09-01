@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 import { Tree, TreeProps } from '../../components/tree';
 
@@ -7,7 +7,26 @@ export default {
   component: Tree,
 } as Meta;
 
-const Template: Story<TreeProps> = (args) => <Tree {...args} />;
+const Template: Story<TreeProps> = (args) => {
+  const update = useState(false)[1];
+
+  return <>
+    <button onClick={() => {
+      args.treeData = [
+        ...args.treeData,
+        {
+          value: 'oooo',
+          children: [],
+        }
+      ];
+
+      update(u => !u);
+    }
+    }>改数据</button>
+
+    <Tree {...args} />
+  </>
+};
 
 export const TreeDemo = Template.bind({});
 

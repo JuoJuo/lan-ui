@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import 'bulma';
 import { v4 as uuidv4 } from 'uuid';
 import './index.css';
+import { cloneDeep } from '../../utils';
 
 type treeDataType = {
   value: string,
@@ -9,10 +10,11 @@ type treeDataType = {
   children?: Array<treeDataType>,
   level?: number,
   expand?: boolean,
+  visible?: boolean,
   parent?: treeDataType | null,
 };
 
-function flatten(list: Array<treeDataType> = [], level: number = 1, parent: treeDataType['parent'] = null, defaultExpand = true): Array<treeDataType> {
+function flatten(list: Array<treeDataType> = [], level: number = 1, parent: treeDataType['parent'] = null, defaultExpand = true, visible = true): Array<treeDataType> {
   const rs: Array<treeDataType> = [];
 
   function inner_flatten(list: Array<treeDataType>, level: number, parent:treeDataType['parent'], defaultExpand:boolean) {
@@ -21,6 +23,7 @@ function flatten(list: Array<treeDataType> = [], level: number = 1, parent: tree
     list.forEach((item, i) => {
       item.level = level;
       item.parent = parent;
+      item.visible = visible;
       item.expand = i === 0 ? true : defaultExpand;
       item.id = item.id ? item.id : uuidv4();
 
@@ -35,14 +38,22 @@ function flatten(list: Array<treeDataType> = [], level: number = 1, parent: tree
   return rs;
 }
 
-function reverseChildExpand(children: treeDataType['children'] = []) {
-  debugger
-  if (children.length === 0) return;
+function reverseChildExpand(item : treeDataType){
+  if (item.children && item.children.length !== 0) {
+    item.expand = !item.expand;
+  }
 
-  children.forEach((data: treeDataType) => {
-    data.expand = false;
-    reverseChildExpand(data.children);
-  })
+  function _fn(rowData: treeDataType) {
+    const { children = [] } = rowData;
+    if (children.length === 0) return;
+
+    children.forEach((data: treeDataType) => {
+      data.visible = item.expand;
+      _fn(data);
+    })
+  }
+
+  _fn(item);
 }
 
 export interface TreeProps {
@@ -55,31 +66,36 @@ export interface TreeProps {
 export const Tree: React.FC<TreeProps> = (props) => {
   const { treeData = [] } = props;
 
-  const [flattenedData , setFlattenedData] = useState(flatten(treeData));
+  const flattenedData = useMemo(() => {
+    const mTreeData = cloneDeep(treeData);
+    return flatten(mTreeData);
+  }, [treeData]);
+
+  const updateComponent = useState(0)[1];
 
   const handleClick = (item: treeDataType) => {
-    reverseChildExpand(item.children);
-    setFlattenedData([...flattenedData]);
-    console.log(flattenedData);
+    reverseChildExpand(item);
+    updateComponent(n => n + 1);
   };
 
-  console.log('render');
   return <>
-    <ul>
+    <ul className="user-select-none">
       {
-        flattenedData.map((item) => (
-          <li
-            key={item.id}
-            onClick={ () => handleClick(item)}
-            className='is-light test'
-            style={{
-              paddingLeft: `${20 * item.level!}px`,
-              cursor: "pointer",
-            }}
-          >
-            { item.value }
-          </li>
-        ))
+        flattenedData
+          .filter(({ visible }) => visible)
+          .map((item) => (
+            <li
+              key={item.id}
+              onClick={ () => handleClick(item)}
+              className='is-light test'
+              style={{
+                paddingLeft: `${20 * item.level!}px`,
+                cursor: "pointer",
+              }}
+            >
+              { item.value }
+            </li>
+          ))
       }
     </ul>
   </>;
