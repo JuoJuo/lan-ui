@@ -1,0 +1,11 @@
+.absolute {
+  position: absolute;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

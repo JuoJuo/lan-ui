@@ -3,7 +3,7 @@ import 'bulma';
 import { getDefaultGlobalSize, getDefaultGlobalColor, getClassNames } from '../../utils';
 
 export type sizeTypes = 'small' | 'normal' | 'medium' | 'large';
-export type MainColorTypes = 'primary' | 'info' | 'success' | 'warning' | 'danger' | '';
+export type MainColorTypes = 'primary' | 'info' | 'success' | 'warning' | 'danger' | 'link' | '';
 export type colorTypes  = 'white' | 'light' | 'dark' | 'black' | 'text' | 'link';
 /*
 * docs uses
