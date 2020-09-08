@@ -1,0 +1,30 @@
+.abs-layout {
+  position: absolute;
+  top: 44px;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.cursor-td td {
+  cursor: pointer;
+}
+
+.toolbar span {
+  cursor: pointer;
+}
+
+.cursor-td td:hover {
+  background-color: beige;
+}
+
+.w-100-p {
+  width: 100%;
+  max-width: 380px;
+  min-width: 245px;
+}

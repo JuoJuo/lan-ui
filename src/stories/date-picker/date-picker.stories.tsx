@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 import { DatePicker, DatePickerProps } from '../../components/date-picker';
 import { Row } from '../../components/row';
@@ -9,16 +9,17 @@ export default {
   component: DatePicker,
 } as Meta;
 
-const Template: Story<DatePickerProps> = (args) => <>
-  <Row>
-    <Col span='2'>
-      <DatePicker {...args} />
-    </Col>
-  </Row>
-</>;
+const Template: Story<DatePickerProps> = () => {
+  const [v, setV] = useState(new Date());
+
+  return <>
+    <Row>
+      <Col span='2'>
+        <DatePicker date={v} onChange={ newDate => setV(newDate)}/>
+      </Col>
+    </Row>
+  </>
+};
 
 export const PickerDemo = Template.bind({});
-PickerDemo.args = {
-  color: 'primary',
-  size: 'normal',
-};
+PickerDemo.args = {};

@@ -69,7 +69,7 @@ export const Input: React.FC<InputProps> = (props) => {
     />
   };
 
-  const inputJsx = useMemo(() => getInputJSX(), [color, size, rounded, disabled, password, value]);
+  const inputJsx = useMemo(getInputJSX, [color, size, rounded, disabled, password, value]);
 
   if (loading) {
     return (

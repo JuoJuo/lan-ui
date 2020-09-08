@@ -1,18 +1,17 @@
-import React, { useEffect, useState, useRef, useMemo, MutableRefObject } from 'react';
+import React, { useEffect, useState, useRef, MutableRefObject } from 'react';
 import 'bulma';
-import { MainColorTypes, sizeTypes } from "../button";
 import { Input } from '../input';
-import { getClassNames, getDefaultGlobalSize } from "../../utils";
+import "./index.css";
 
 export interface DatePickerProps {
   /**
-   * input边框的颜色
+   * 当前选择的日期
    */
-  color?: MainColorTypes;
+  date: Date;
   /**
-   * 按钮大小
+   * 日期改变的时候触发
    */
-  size?: sizeTypes;
+  onChange: (string) => void;
 }
 
 export function useClickOutside(ref: React.RefObject<HTMLElement>, handler: Function) {
@@ -34,9 +33,10 @@ const getDateData = function(year: number, month: number) {
   let weekDay = firstDay.getDay(); //周日，0，周六 6
   weekDay = weekDay === 0 ? 7 : weekDay;
   let start = firstDay.getTime() - weekDay * 60 * 60 * 24 * 1000;
-  let arr: number[] = [];
+  let arr: Array<Date> = [];
   for (let i = 0; i < 42; i++) {
-    arr.push(new Date(start + i * 60 * 60 * 24 * 1000).getDate());
+    const d = new Date(start + i * 60 * 60 * 24 * 1000);
+    arr.push(d);
   }
   let k = -1;
   return Array.from({ length: 6 }, () => {
@@ -44,10 +44,11 @@ const getDateData = function(year: number, month: number) {
     return arr.slice(k * 7, (k + 1) * 7);
   });
 };
-getDateData(2020, 8)
 
 export const DatePicker: React.FC<DatePickerProps> = (props) => {
-  const [date, setDate] = useState('');
+  const { onChange, date } = props;
+
+  // const [date, setDate] = useState(value);
   const [isPanelShow, switchPanelShow] = useState(false);
   const ref: MutableRefObject<HTMLDivElement> = useRef<HTMLDivElement>();
   useClickOutside(ref, () => switchPanelShow(false));
@@ -56,16 +57,62 @@ export const DatePicker: React.FC<DatePickerProps> = (props) => {
     switchPanelShow(true);
   };
 
+  function onDateChange(d) {
+    onChange(d);
+  }
+
+  const handleDayChange = (checkedDate) => {
+    onDateChange(checkedDate);
+    switchPanelShow(false);
+  };
+
+  const yearMonthChange = (d, type) => {
+    switch (type) {
+      case '-year':
+        d.setFullYear(d.getFullYear() - 1);
+        break;
+      case '-month':
+        d.setMonth(d.getMonth() - 1);
+        break;
+      case '+year':
+        d.setFullYear(d.getFullYear() + 1);
+        break;
+      case '+month':
+        d.setMonth(d.getMonth() + 1);
+        break;
+      default: return;
+    }
+
+    onDateChange(new Date(d));
+  };
+
   const renderPanel = () => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
     if (isPanelShow) {
-      const dayData = getDateData(new Date().getFullYear(), new Date().getMonth());
+      const rangeDate = getDateData(year, month);
 
       return <>
-        <div style={{backgroundColor: 'red', transition: 'all 2000 cubic-bezier(0.23, 1, 0.32, 1)'}}>
-          <h1>标题</h1>
+        <article className="panel is-primary abs-layout is-size-7 w-100-p">
+          <p className="p-10 panel-heading is-flex space-between">
+            <span className="toolbar">
+              <span className="has-text-white" onClick={() => yearMonthChange(date, '-year')}>-年</span>
+              <span className="has-text-white" onClick={() => yearMonthChange(date, '-month')}>-月</span>
+            </span>
 
-          <table>
-            <thead>
+
+            <span>{`${year}年${month + 1}月`}</span>
+
+            <span className="toolbar">
+              <span className="has-text-white" onClick={() => yearMonthChange(date, '+month')}>+月</span>
+              <span className="has-text-white" onClick={() => yearMonthChange(date, '+year')}>+年</span>
+            </span>
+
+          </p>
+          <div className="panel-block is-fullwidth">
+            <table className="table is-bordered is-fullwidth">
+              <thead>
               <tr>
                 <th>日</th>
                 <th>一</th>
@@ -75,27 +122,34 @@ export const DatePicker: React.FC<DatePickerProps> = (props) => {
                 <th>五</th>
                 <th>六</th>
               </tr>
-            </thead>
-            <tbody>
-              {dayData.map((v, index) => (
+              </thead>
+              <tbody className="cursor-td">
+              {rangeDate.map((v, index) => (
                 <tr key={index}>
-                  {v.map((k, i) => (
-                    <td key={i}>{k}</td>
+                  {v.map((dateItem, i) => (
+                    <td
+                      className={dateItem.getMonth() !== month ? 'has-text-grey': ''}
+                      key={i}
+                      onClick={() => handleDayChange(dateItem)}>
+                      {dateItem.getDate()}
+                    </td>
                   ))}
                 </tr>
               ))}
-            </tbody>
-          </table>
-        </div>
+              </tbody>
+            </table>
+          </div>
+        </article>
       </>;
     }
   };
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="is-relative">
       <Input
-        value={date}
+        value={getDateText(date)}
         onClick={handleClick}
+        placeholder="选择日期"
       >
 
       </Input>
@@ -103,3 +157,15 @@ export const DatePicker: React.FC<DatePickerProps> = (props) => {
     </div>
   );
 };
+
+
+function getDateText(date) {
+  const mm = uniLength(String(date.getMonth() + 1));
+  const dd = uniLength(String(date.getDate()));
+
+  return `${date.getFullYear()}-${mm}-${dd}`;
+}
+
+function uniLength(str) {
+  return str.padStart(2, 0);
+}
