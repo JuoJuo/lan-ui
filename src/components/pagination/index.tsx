@@ -28,24 +28,20 @@ function calcPage(total, pageNo, pageSize) {
   } else {
     const middlePageNo = totalPage / 2;
 
-    if (pageNo - 2 === 1) {
+    if (pageNo <= 3) {
       for (let i = 0; i < pageNo; i++) {
-        arr = [...arr, i + 1];
-      }
-    } else if (pageNo - 2 < 1) {
-      for (let i = 0; i < pageNo; i++) {
-        arr = [...arr, i + 1, null];
-      }
-    }else {
-      arr = [1, null, pageNo - 2, pageNo - 1, pageNo];
-    }
-
-    if (pageNo + 2 >= totalPage) {
-      for (let i = pageNo; i < totalPage; i++) {
-        arr = [...arr, pageNo + 1];
+        arr.push(i + 1);
       }
     } else {
-      arr = [...arr, middlePageNo + 1 , middlePageNo + 2, null, totalPage];
+      arr = [1, null, pageNo - 1, pageNo];
+    }
+
+    if (totalPage - pageNo <= 2) {
+      for (let i = pageNo; i < totalPage; i++) {
+        arr = [...arr, i + 1];
+      }
+    } else {
+      arr = [...arr, pageNo + 1, null, totalPage];
     }
   }
 

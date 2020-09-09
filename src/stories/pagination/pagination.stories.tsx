@@ -9,7 +9,7 @@ export default {
 
 const Template: Story<PaginationProps> = (args) => {
   return <>
-    <Pagination total={100} pageNo={2} pageSize={10}/>;
+    <Pagination total={100} pageNo={3} pageSize={10}/>;
   </>
 };
 
